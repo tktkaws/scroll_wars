@@ -1,0 +1,29 @@
+---
+import CreditCard from "./CreditCard.astro";
+interface Props {
+  reading?: boolean;
+}
+const { reading = false } = Astro.props;
+---
+
+<section
+  class:list={reading ? ["reader-profile"] : ["credits-scene"]}
+  aria-label="実験サイトのクレジット"
+>
+  <CreditCard label="オマージュ" reading={reading}>
+    <p class="intro-japanese credit-role">Inspired by</p>
+    <p class="intro-japanese credit-name">
+      STAR WARS: EPISODE IV
+    </p>
+  </CreditCard>
+
+  <CreditCard label="制作者" reading={reading}>
+    <p class="intro-japanese credit-role">Developed by</p>
+    <p class="intro-japanese credit-name">TAKAYUKI TAKAHASHI</p>
+  </CreditCard>
+
+  <CreditCard label="使用技術" reading={reading}>
+    <p class="intro-japanese credit-role">Built with</p>
+    <p class="intro-japanese credit-name">Astro / TypeScript / three.js / Lenis</p>
+  </CreditCard>
+</section>

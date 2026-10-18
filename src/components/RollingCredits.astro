@@ -1,0 +1,67 @@
+---
+interface Props { reading?: boolean }
+const { reading = false } = Astro.props;
+---
+
+<section
+  class:list={reading ? ['reader-profile', 'reader-rolling-credits'] : ['rolling-credits-scene']}
+  data-rolling-credits-scene={reading ? undefined : ''}
+  aria-label="上へ流れるエンドクレジット"
+  aria-hidden={reading ? undefined : 'true'}
+  inert={!reading}
+>
+  <div class="rolling-credits-text" data-rolling-credits={reading ? undefined : ''}>
+    <!-- Edit this HTML freely. All groups scroll upward together in cinema mode. -->
+    <div class="rolling-credit-group">
+      <h3>CONCEPT</h3>
+      <dl class="rolling-profile-details">
+        <div>
+          <dt>TITLE</dt>
+          <dd>Scroll Wars</dd>
+        </div>
+        <div>
+          <dt>FORMAT</dt>
+          <dd>Scroll-driven web experiment</dd>
+        </div>
+        <div>
+          <dt>MOTIF</dt>
+          <dd>A cinematic opening and ending</dd>
+        </div>
+        <div>
+          <dt>PURPOSE</dt>
+          <dd>Turning scroll into a timeline</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="rolling-credit-group">
+      <h3>TECHNOLOGY</h3>
+      <dl class="rolling-profile-details">
+        <div>
+          <dt>FRAMEWORK</dt>
+          <dd>Astro</dd>
+        </div>
+        <div>
+          <dt>LANGUAGE</dt>
+          <dd>TypeScript</dd>
+        </div>
+        <div>
+          <dt>GRAPHICS</dt>
+          <dd>three.js / WebGL / GLSL</dd>
+        </div>
+        <div>
+          <dt>MOTION</dt>
+          <dd>CSS 3D transform</dd>
+        </div>
+        <div>
+          <dt>SCROLL</dt>
+          <dd>Lenis</dd>
+        </div>
+        <div>
+          <dt>FALLBACK</dt>
+          <dd>SVG / HTML</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
