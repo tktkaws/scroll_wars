@@ -1,0 +1,86 @@
+---
+import OpeningIntro from './OpeningIntro.astro';
+import OpeningTitle from './OpeningTitle.astro';
+import OpeningStory from './OpeningStory.astro';
+import ProductionCredit from './ProductionCredit.astro';
+import EndCredits from './EndCredits.astro';
+import RollingCredits from './RollingCredits.astro';
+---
+
+<main id="opening">
+  <div class="scroll-journey" data-journey>
+    <div class="cinema-stage">
+      <section class="production-scene" data-production-scene>
+        <ProductionCredit />
+      </section>
+      <section class="intro-scene" data-intro-scene inert>
+        <div class="intro-copy">
+          <p class="intro-japanese"><OpeningIntro /></p>
+        </div>
+      </section>
+
+      <section class="title-scene" data-title-scene inert>
+        <div class="title-projection">
+          <h1 class="opening-title" data-title><OpeningTitle /></h1>
+        </div>
+      </section>
+
+      <div class="crawl-viewport" data-crawl-viewport aria-hidden="true">
+        <div class="crawl-plane">
+          <article class="crawl-text" data-crawl><OpeningStory /></article>
+        </div>
+      </div>
+
+      <EndCredits />
+      <RollingCredits />
+      <section class="ending-scene" data-ending inert aria-label="エンドクレジットの終了">
+        <nav class="ending-navigation" aria-label="場面を選んでもう一度見る">
+          <button class="ending-stop" type="button" data-chapter="0" aria-label="実験の導入へ">01 — PROLOGUE</button>
+          <button class="ending-stop" type="button" data-chapter="1" aria-label="ロゴ演出へ">02 — LOGO</button>
+          <button class="ending-stop" type="button" data-chapter="2" aria-label="オープニングクロールへ">03 — CRAWL</button>
+          <button class="ending-stop" type="button" data-chapter="3" aria-label="場面転換へ">04 — TRANSITION</button>
+          <button class="ending-stop" type="button" data-chapter="4" aria-label="エンドクレジットへ">05 — CREDITS</button>
+        </nav>
+      </section>
+    </div>
+    <article class="sr-only" aria-label="実験サイトの解説"><OpeningStory /></article>
+  </div>
+
+  <article class="reader" id="reader" tabindex="-1">
+    <ProductionCredit />
+    <p class="reader-prelude"><OpeningIntro /></p>
+    <h1><OpeningTitle /></h1>
+    <OpeningStory />
+    <EndCredits reading />
+    <RollingCredits reading />
+  </article>
+
+  <nav class="chapter-navigation" aria-label="実験サイトの場面" data-chapter-navigation>
+    <button class="chapter-stop is-current" type="button" data-chapter="0" aria-label="実験の導入へ" aria-current="step"><span></span><span class="chapter-name">01 — PROLOGUE</span></button>
+    <span class="chapter-line"></span>
+    <button class="chapter-stop" type="button" data-chapter="1" aria-label="ロゴ演出へ"><span></span><span class="chapter-name">02 — LOGO</span></button>
+    <span class="chapter-line"></span>
+    <button class="chapter-stop" type="button" data-chapter="2" aria-label="オープニングクロールへ"><span></span><span class="chapter-name">03 — CRAWL</span></button>
+    <span class="chapter-line"></span>
+    <button class="chapter-stop" type="button" data-chapter="3" aria-label="場面転換へ"><span></span><span class="chapter-name">04 — TRANSITION</span></button>
+    <span class="chapter-line"></span>
+    <button class="chapter-stop" type="button" data-chapter="4" aria-label="エンドクレジットへ"><span></span><span class="chapter-name">05 — CREDITS</span></button>
+  </nav>
+
+  <footer class="journey-footer" data-footer>
+    <div class="footer-actions">
+      <button class="reader-toggle" type="button" aria-pressed="false" aria-controls="reader" data-reader-toggle>
+        <svg class="reader-toggle-icon reader-toggle-icon--text" width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 4h14M3 10h14M3 16h9" stroke="currentColor" stroke-width="1.4" /></svg>
+        <svg class="reader-toggle-icon reader-toggle-icon--cinema" width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2.5" y="4" width="15" height="12" rx="1.5" stroke="currentColor" stroke-width="1.4" /><path d="m8 7 5 3-5 3V7Z" fill="currentColor" /></svg>
+        <span data-reader-label>文章モード</span>
+      </button>
+    </div>
+    <div class="journey-progress"><span class="progress-caption" data-scene-label>01 — PROLOGUE</span><span class="progress-divider"></span><span class="progress-number" data-progress>000</span><span class="progress-unit">%</span></div>
+  </footer>
+  <p class="sr-only" role="status" aria-live="polite" data-status>実験の導入です。スクロールするとロゴ、オープニングクロールの順に進みます。文章モードボタンで、演出を外した表示に切り替えられます。</p>
+</main>
+
+<script>
+  import { initOpening } from '../scripts/opening';
+  initOpening();
+</script>
