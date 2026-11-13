@@ -2,7 +2,6 @@
 import OpeningIntro from './OpeningIntro.astro';
 import OpeningTitle from './OpeningTitle.astro';
 import OpeningStory from './OpeningStory.astro';
-import ProductionCredit from './ProductionCredit.astro';
 import EndCredits from './EndCredits.astro';
 import RollingCredits from './RollingCredits.astro';
 ---
@@ -10,10 +9,7 @@ import RollingCredits from './RollingCredits.astro';
 <main id="opening">
   <div class="scroll-journey" data-journey>
     <div class="cinema-stage">
-      <section class="production-scene" data-production-scene>
-        <ProductionCredit />
-      </section>
-      <section class="intro-scene" data-intro-scene inert>
+      <section class="intro-scene" data-intro-scene>
         <div class="intro-copy">
           <p class="intro-japanese"><OpeningIntro /></p>
         </div>
@@ -47,7 +43,6 @@ import RollingCredits from './RollingCredits.astro';
   </div>
 
   <article class="reader" id="reader" tabindex="-1">
-    <ProductionCredit />
     <p class="reader-prelude"><OpeningIntro /></p>
     <h1><OpeningTitle /></h1>
     <OpeningStory />
@@ -82,5 +77,23 @@ import RollingCredits from './RollingCredits.astro';
 
 <script>
   import { initOpening } from '../scripts/opening';
-  initOpening();
+  import { initStarfield } from '../scripts/starfield';
+
+  async function startOpening() {
+    const pageLoaded = document.readyState === 'complete'
+      ? Promise.resolve()
+      : new Promise<void>((resolve) => window.addEventListener('load', () => resolve(), { once: true }));
+    const canvas = document.querySelector<HTMLCanvasElement>('#starfield');
+    await Promise.all([pageLoaded, canvas ? initStarfield(canvas) : Promise.resolve()]);
+    await Promise.all([
+      document.fonts.ready,
+      ...[...document.images].map((image) => image.decode().catch(() => undefined)),
+    ]);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    initOpening();
+    // Keep the intro fixed until the measured layout and scene have painted.
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    delete document.documentElement.dataset.loading;
+  }
+  void startOpening();
 </script>

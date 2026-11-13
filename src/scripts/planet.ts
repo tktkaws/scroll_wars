@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { planetScene } from '../data/planet';
 
-export function createScenePlanet(scene: THREE.Scene, fallback: HTMLElement | null, requestRender: () => void) {
+export function createScenePlanet(scene: THREE.Scene, fallback: HTMLElement | null, requestRender: () => void, loadingManager: THREE.LoadingManager) {
   let ready = false;
   let disposed = false;
-  const texture = new THREE.TextureLoader().load(planetScene.image, () => {
+  const texture = new THREE.TextureLoader(loadingManager).load(planetScene.image, () => {
     if (disposed) return;
     ready = true;
     requestRender();

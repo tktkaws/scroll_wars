@@ -14,10 +14,6 @@ const shiftAfterStory = (position: number) => compressTitleStory(originalCrawlEn
 
 /** Normalized scroll positions shared by the title, crawl and navigation. */
 export const sequence = {
-  productionHold: 0.01,
-  productionEnd: 0.02,
-  introStart: 0.02,
-  introFadeInEnd: 0.025,
   introHold: 0.032,
   introEnd: 0.04,
   titleStart: originalTitleStart,

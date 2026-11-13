@@ -5,6 +5,8 @@ import { createSceneMoons } from './moons';
 import { createScenePlanet } from './planet';
 
 export function initStarfield(canvas: HTMLCanvasElement) {
+  const loadingManager = new THREE.LoadingManager();
+  const assetsReady = new Promise<void>((resolve) => { loadingManager.onLoad = () => resolve(); });
   let renderer: THREE.WebGLRenderer | undefined;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
@@ -87,8 +89,8 @@ export function initStarfield(canvas: HTMLCanvasElement) {
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   let available = Boolean(renderer);
   let disposed = false;
-  const moons = createSceneMoons(scene, canvas.parentElement?.querySelector<HTMLElement>('.moon-scene') ?? null, requestRender);
-  const planet = createScenePlanet(scene, canvas.parentElement?.querySelector<HTMLElement>('.planet-scene') ?? null, requestRender);
+  const moons = createSceneMoons(scene, canvas.parentElement?.querySelector<HTMLElement>('.moon-scene') ?? null, requestRender, loadingManager);
+  const planet = createScenePlanet(scene, canvas.parentElement?.querySelector<HTMLElement>('.planet-scene') ?? null, requestRender, loadingManager);
 
   // Render only after a change. Nothing keeps moving when the scroll stops.
   function render() {
@@ -192,4 +194,6 @@ export function initStarfield(canvas: HTMLCanvasElement) {
   creditsCanvas?.addEventListener('webglcontextrestored', onCreditsContextRestored);
   window.addEventListener('pagehide', (event) => { if (!event.persisted) dispose(); }, { once: true });
   resize();
+  // LoadingManager also completes failed requests, preserving the HTML fallback.
+  return assetsReady;
 }

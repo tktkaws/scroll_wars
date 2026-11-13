@@ -12,9 +12,8 @@ Astroで各シーンのHTMLを生成し、CSS 3D Transformでタイトルとク�
 
 ```ts
 export const sequence = {
-  productionHold: 0.01,
-  productionEnd: 0.02,
-  introStart: 0.02,
+  introHold: 0.032,
+  introEnd: 0.04,
   // ...
   rollingCreditsEnd: shiftAfterStory(0.99),
   endingStart: shiftAfterStory(0.99),
@@ -41,29 +40,18 @@ const smoothstep = (value: number) =>
 
 ## 01 — PROLOGUE
 
-### プロダクションクレジット
-
-[ProductionCredit.astro](./src/components/ProductionCredit.astro)を画面中央へ固定し、`productionHold`から`productionEnd`の区間で不透明度を1から0へ変化させます。
-
-```ts
-const productionOpacity = 1 - smoothstep(
-  portion(progress, sequence.productionHold, sequence.productionEnd),
-);
-```
-
-透明になったあとは`visibility: hidden`と`inert`を設定し、非表示要素が操作や読み上げの対象に残らないようにしています。
-
 ### 青い導入文
 
-[OpeningIntro.astro](./src/components/OpeningIntro.astro)の文章を、`introStart`からフェードインし、`introHold`まで保持したあと`introEnd`でフェードアウトします。
+[OpeningIntro.astro](./src/components/OpeningIntro.astro)の文章を最初から表示します。HTMLの描画前に演出モードと読み込み状態を設定し、文章モードの一瞬の表示を防ぎます。ページ、画像のデコード、フォント、three.jsのテクスチャの読み込みとレイアウトの計測が完了するまでスクロールを固定し、ナビゲーションを隠します。画像取得が失敗した場合も、既存のフォールバックで開始します。
+
+読み込み後はスクロールの`introHold`まで導入文を保持し、`introEnd`でフェードアウトします。
 
 ```ts
 const introOpacity =
-  smoothstep(portion(progress, sequence.introStart, sequence.introFadeInEnd)) *
-  (1 - smoothstep(portion(progress, sequence.introHold, sequence.introEnd)));
+  1 - smoothstep(portion(progress, sequence.introHold, sequence.introEnd));
 ```
 
-フェードインとフェードアウトを乗算することで、同じ要素に「出現・静止・消失」の3段階を持たせています。
+透明になったあとは`visibility: hidden`と`inert`を設定し、非表示要素が操作や読み上げの対象に残らないようにしています。
 
 ## 02 — LOGO
 
@@ -218,7 +206,7 @@ rollingCredits.style.transform =
 
 文章モードでは、各シーンで使用している同じAstroコンポーネントを通常の文書フローに並べます。コピーを二重管理せず、演出表示と文章表示で内容が一致する構成です。
 
-`prefers-reduced-motion: reduce`が有効な場合は、初期表示から文章モードを選択します。文章モードへの切り替え時にはLenisを破棄し、演出モードへ戻ると保存していた進行位置を復元します。
+初期表示は演出モードで、文章モードはボタンから選択できます。`prefers-reduced-motion: reduce`が有効な場合は慣性スクロールと背景のカメラ移動を抑えます。文章モードへの切り替え時にはLenisを破棄し、演出モードへ戻ると保存していた進行位置を復元します。
 
 WebGLを初期化できない場合は、[Starfield.astro](./src/components/Starfield.astro)が生成するSVGの星空とHTML画像の月・惑星を維持します。JavaScriptが無効な場合も、演出とは別に配置した本文を読み取れます。
 

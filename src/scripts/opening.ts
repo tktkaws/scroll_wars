@@ -18,7 +18,6 @@ const smoothstep = (value: number) => value * value * (3 - 2 * value);
 export function initOpening() {
   const root = document.documentElement;
   const journey = document.querySelector<HTMLElement>('[data-journey]')!;
-  const productionScene = document.querySelector<HTMLElement>('[data-production-scene]')!;
   const introScene = document.querySelector<HTMLElement>('[data-intro-scene]')!;
   const titleScene = document.querySelector<HTMLElement>('[data-title-scene]')!;
   const title = document.querySelector<HTMLElement>('[data-title]')!;
@@ -38,7 +37,7 @@ export function initOpening() {
   const chapterNavigation = document.querySelector<HTMLElement>('[data-chapter-navigation]')!;
   const stops = [...document.querySelectorAll<HTMLButtonElement>('[data-chapter]')];
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let readerMode = motionQuery.matches;
+  let readerMode = false;
   let savedProgress = 0;
   let progress = 0;
   let range = 1;
@@ -75,12 +74,7 @@ export function initOpening() {
     root.style.setProperty('--galaxy-opacity', String(smoothstep(portion(progress, sequence.irisStart, sequence.irisStart + 0.012))));
     root.style.setProperty('--credit-stars-opacity', String(1 - smoothstep(portion(progress, sequence.creditsEnd, sequence.rollingCreditsStart))));
     universe.style.visibility = iris < 1 ? 'visible' : 'hidden';
-    const productionOpacity = 1 - smoothstep(portion(progress, sequence.productionHold, sequence.productionEnd));
-    productionScene.style.opacity = String(productionOpacity);
-    productionScene.style.visibility = productionOpacity > 0 ? 'visible' : 'hidden';
-    productionScene.inert = productionOpacity === 0;
-    const introOpacity = smoothstep(portion(progress, sequence.introStart, sequence.introFadeInEnd))
-      * (1 - smoothstep(portion(progress, sequence.introHold, sequence.introEnd)));
+    const introOpacity = 1 - smoothstep(portion(progress, sequence.introHold, sequence.introEnd));
     introScene.style.opacity = String(introOpacity);
     introScene.style.visibility = introOpacity > 0 ? 'visible' : 'hidden';
     introScene.inert = introOpacity === 0;

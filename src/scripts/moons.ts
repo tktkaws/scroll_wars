@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 import { moonScene } from '../data/moons';
 
-export function createSceneMoons(scene: THREE.Scene, fallback: HTMLElement | null, requestRender: () => void) {
+export function createSceneMoons(scene: THREE.Scene, fallback: HTMLElement | null, requestRender: () => void, loadingManager: THREE.LoadingManager) {
   const group = new THREE.Group();
   scene.add(group);
   let ready = false;
   let disposed = false;
-  const texture = new THREE.TextureLoader().load(moonScene.image, () => {
+  const texture = new THREE.TextureLoader(loadingManager).load(moonScene.image, () => {
     if (disposed) return;
     ready = true;
     requestRender();
