@@ -152,7 +152,7 @@ root.style.setProperty('--iris-radius', `${radius}px`);
 
 ### 固定クレジット
 
-[EndCredits.astro](./src/components/EndCredits.astro)は、`Inspired by`、制作者、使用技術の3枚を[CreditCard.astro](./src/components/CreditCard.astro)で生成します。
+[EndCredits.astro](./src/components/EndCredits.astro)は、`Inspired by`と制作者の2枚を[CreditCard.astro](./src/components/CreditCard.astro)で生成します。
 
 `creditsStart`から`creditsEnd`までをカード数で等分し、それぞれを順番にフェードイン・フェードアウトします。
 
